@@ -1,0 +1,37 @@
+.input {
+    position: relative;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    width: 90%;
+}
+
+.input-box{
+    width: 100%;
+    border-radius: 3rem;
+    padding: 1.5rem 2rem;
+    font-size: 1.5rem;
+    border: none;
+    transition: .1s;
+    box-shadow: .1rem -.1rem 1rem rgba(0, 0, 0, .3);
+}
+
+.input-box::placeholder{
+    color: #cc338b;
+}
+
+.input-box:focus{
+    box-shadow: 0 0 1rem 100rem rgba(0, 0, 0, .5);
+    outline: none;
+}
+
+.input-submit{
+    position: absolute;
+    padding: 1.3rem 1rem;
+    border-radius: 50%;
+    border: none;
+    font-size: 1.5rem;
+    margin: 0 95.5%;
+    color: #cc338b;
+    box-shadow: inset -1rem -.1rem 1rem rgba(0, 0, 0, 0.418);
+}
