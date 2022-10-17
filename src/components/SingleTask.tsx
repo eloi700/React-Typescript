@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Draggable } from 'react-beautiful-dnd';
 import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
 import { MdDone } from 'react-icons/md';
 import { Task } from '../model';
@@ -6,12 +7,13 @@ import './style.css';
 // import TaskList from './TaskList';
 
 interface Props {
+  index: number;
   task: Task;
   tasks: Task[];
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
-const SingleTask = ({ task, tasks, setTasks }: Props) => {
+const SingleTask = ({ index, task, tasks, setTasks }: Props) => {
   const [edit, setEdit] = useState<boolean>(false);
   const [editTask, setEditTask] = useState<string>(task.task);
 
@@ -40,43 +42,50 @@ const SingleTask = ({ task, tasks, setTasks }: Props) => {
 
   useEffect(() => {
     inputRef.current?.focus();
-  }, [edit])
-
-
+  }, [edit]);
 
   return (
-    <form className='task-single' onSubmit={(e) => handleEdit(e, task.id)}>
-      {edit ? (
-        <input
-          className='task-single-text'
-          value={editTask}
-          onChange={(e) => setEditTask(e.target.value)}
-        />
-      ) : task.isCompleted ? (
-        <s className='task-single-text'>{task.task}</s>
-      ) : (
-        <span className='task-single-text'>{task.task}</span>
-      )}
-
-      <div className='icon-group'>
-        <span
-          className='icon'
-          onClick={() => {
-            if (!edit && !task.isCompleted) {
-              setEdit(!edit);
-            }
-          }}
+    <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
+      {(provided) => (
+        <form
+          className='task-single'
+          onSubmit={(e) => handleEdit(e, task.id)}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
         >
-          <AiFillEdit />
-        </span>
-        <span className='icon' onClick={() => handleDelete(task.id)}>
-          <AiFillDelete />
-        </span>
-        <span className='icon' onClick={() => handleDone(task.id)}>
-          <MdDone />
-        </span>
-      </div>
-    </form>
+          {edit ? (
+            <input
+              className='task-single-text'
+              value={editTask}
+              onChange={(e) => setEditTask(e.target.value)}
+            />
+          ) : task.isCompleted ? (
+            <s className='task-single-text'>{task.task}</s>
+          ) : (
+            <span className='task-single-text'>{task.task}</span>
+          )}
+          <div className='icon-group'>
+            <span
+              className='icon'
+              onClick={() => {
+                if (!edit && !task.isCompleted) {
+                  setEdit(!edit);
+                }
+              }}
+            >
+              <AiFillEdit />
+            </span>
+            <span className='icon' onClick={() => handleDelete(task.id)}>
+              <AiFillDelete />
+            </span>
+            <span className='icon' onClick={() => handleDone(task.id)}>
+              <MdDone />
+            </span>
+          </div>
+        </form>
+      )}
+    </Draggable>
   );
 };
 

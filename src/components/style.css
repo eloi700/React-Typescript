@@ -152,6 +152,7 @@
 
     .container{
         width: 95%;
+        gap: 1rem;
         flex-direction: column;
     }
   }
