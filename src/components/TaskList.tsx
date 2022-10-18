@@ -11,20 +11,27 @@ interface Props {
   setCompletedTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
-const TaskList: React.FC<Props> = ({ tasks, setTasks, completedTasks,setCompletedTasks }: Props) => {
+const TaskList: React.FC<Props> = ({
+  tasks,
+  setTasks,
+  completedTasks,
+  setCompletedTasks,
+}: Props) => {
   return (
     <div className='container'>
       <Droppable droppableId='TaskList'>
-        {(provided) => (
+        {(provided, snapshot) => (
           <div
-            className='tasks active'
+            className={`tasks active ${
+              snapshot.isDraggingOver ? 'dragactive' : ''
+            }`}
             {...provided.droppableProps}
             ref={provided.innerRef}
           >
             <span className='tasks-heading'>Active Tasks</span>
             {tasks.map((task, index) => (
               <SingleTask
-              index={index}
+                index={index}
                 task={task}
                 tasks={tasks}
                 key={task.id}
@@ -37,16 +44,18 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, completedTasks,setComplete
       </Droppable>
 
       <Droppable droppableId='TaskRemove'>
-        {(provided) => (
+        {(provided, snapshot) => (
           <div
-            className='tasks remove'
+            className={`tasks remove ${
+              snapshot.isDraggingOver ? 'dragcomplete' : ''
+            }`}
             {...provided.droppableProps}
             ref={provided.innerRef}
           >
             <span className='tasks-heading'>Completed Tasks</span>
             {completedTasks.map((task, index) => (
               <SingleTask
-              index={index}
+                index={index}
                 task={task}
                 tasks={completedTasks}
                 key={task.id}
